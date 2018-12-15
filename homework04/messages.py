@@ -4,6 +4,8 @@ import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
 from typing import List, Tuple
+from typing import Dict
+import json
 
 from api import messages_get_history
 from api_models import Message
@@ -29,13 +31,28 @@ def count_dates_from_messages(messages: List[Message]) -> Tuple[Dates, Frequenci
 
     :param messages: список сообщений
     """
-    # PUT YOUR CODE HERE
+    date_count: Dict[datetime.date, int] = {}
+    for msg in messages:
+        if msg.date in date_count:
+            print("exists:", msg.date)
+            date_count[msg.date] += 1
+        else:
+            print("new:", msg.date)
+            date_count[msg.date] = 1
+    dates: Dates = []
+    freqs: Frequencies = []
+    for date, freq in date_count.items():
+        dates.append(date)
+        freqs.append(freq)
+    return dates, freqs
 
 
 def plotly_messages_freq(dates: Dates, freq: Frequencies) -> None:
     """ Построение графика с помощью Plot.ly
 
-    :param date: список дат
+    :param dates: список дат
     :param freq: число сообщений в соответствующую дату
     """
-    # PUT YOUR CODE HERE
+
+    data = [go.Scatter(x=dates, y=freq)]
+    py.iplot(data)

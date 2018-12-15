@@ -1,6 +1,6 @@
 from typing import List, Optional
 from pydantic import BaseModel
-
+import datetime
 
 class BaseUser(BaseModel):
     """ Модель пользователя с базовыми полями """
@@ -16,6 +16,10 @@ class User(BaseUser):
     bdate: Optional[str]
 
 
-class Message(BaseModel):
+class Message:
     """ Модель сообщения """
-    # PUT YOUR CODE HERE
+
+    date: datetime.date
+
+    def __init__(self, date):
+        self.date = date

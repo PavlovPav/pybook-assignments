@@ -13,12 +13,12 @@ def get(url, params={}, timeout=5, max_retries=5, backoff_factor=0.3):
     :param max_retries: максимальное число повторных запросов
     :param backoff_factor: коэффициент экспоненциального нарастания задержки
     """
-    # PUT YOUR CODE HERE
-    delay = 2
+    delay = 0.5
     response = None
     for i in range(max_retries):
         try:
-           response = requests.get(url, params, timeout=delay)
+            response = requests.get(url, params, timeout=delay)
+            break
         except requests.exceptions.RequestException:
             delay = min(delay * backoff_factor, timeout)
     return response
@@ -34,7 +34,7 @@ def get_friends(user_id, fields):
     assert isinstance(fields, str), "fields must be string"
     assert user_id > 0, "user_id must be positive integer"
     # PUT YOUR CODE HERE
-    query = "{domain}/friends.get?access_token={access_token}&user_id={user_id}&fields={fields}&v={api_version}"\
+    query = "{domain}/friends.get?access_token={access_token}&user_id={user_id}&fields={fields}&v={api_version}" \
         .format(domain=config.VK_CONFIG.get('domain'), access_token=config.VK_CONFIG.get('access_token'),
                 user_id=user_id, fields=fields, api_version=config.VK_CONFIG.get("version"))
     return get(query)
@@ -53,3 +53,8 @@ def messages_get_history(user_id, offset=0, count=20):
     assert offset >= 0, "user_id must be positive integer"
     assert count >= 0, "user_id must be positive integer"
     # PUT YOUR CODE HERE
+    query = "{domain}/messages.getHistory?access_token={access_token}&user_id={user_id}&offset={offset}" \
+            "&count={count}&v={api_version}" \
+        .format(domain=config.VK_CONFIG.get('domain'), access_token=config.VK_CONFIG.get('access_token'),
+                user_id=user_id, offset=offset, count=count, api_version=config.VK_CONFIG.get('version'))
+    return get(query)

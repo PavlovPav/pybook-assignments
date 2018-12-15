@@ -1,11 +1,12 @@
 import pygame
-from pygame.locals import *
 import random
+import time
+from pprint import pprint as pp
+from pygame.locals import *
 
 
 class GameOfLife:
-
-    def __init__(self, width=640, height=480, cell_size=10, speed=10):
+    def __init__(self, width = 640, height = 480, cell_size = 10, speed = 1):
         self.width = width
         self.height = height
         self.cell_size = cell_size
@@ -22,77 +23,186 @@ class GameOfLife:
         # Скорость протекания игры
         self.speed = speed
 
+
     def draw_grid(self):
-        """ Отрисовать сетку """
+        tf = (0, 255, 0)
+        # http://www.pygame.org/docs/ref/draw.html#pygame.draw.line
         for x in range(0, self.width, self.cell_size):
-            pygame.draw.line(self.screen, pygame.Color('black'),
-                    (x, 0), (x, self.height))
+            pygame.draw.line(self.screen, pygame.Color('black'), 
+                (x, 0), (x, self.height))
         for y in range(0, self.height, self.cell_size):
-            pygame.draw.line(self.screen, pygame.Color('black'),
-                    (0, y), (self.width, y))
+            pygame.draw.line(self.screen, pygame.Color('black'), 
+                (0, y), (self.width, y))
+        
 
     def run(self):
-        """ Запустить игру """
         pygame.init()
         clock = pygame.time.Clock()
         pygame.display.set_caption('Game of Life')
         self.screen.fill(pygame.Color('white'))
-
-        # Создание списка клеток
-        # PUT YOUR CODE HERE
-
         running = True
+        ss = self.cell_list()
+        pp(ss)
+        self.draw_cell_list(ss)
+        
+        
+        x = self.height // self.cell_size
+        y = self.width // self.cell_size
+
+        '''vv = self.take_form_file()'''
+
         while running:
             for event in pygame.event.get():
                 if event.type == QUIT:
                     running = False
+            temp = self.cell_list1()
+            '''self.draw_cell_list1(temp)'''
+            pp(ss)
+            for i in range(x):
+                for j in range(y):
+                    jj = self.get_neighbours(ss,i,j)  
+                    
+                    
+                    if ((len(jj) > 3) or (len(jj) <2)):
+                        temp[i][j] = 0 
+
+                    elif (len(jj) == 3):
+                        temp[i][j] = 1
+                    else:
+                        temp[i][j] = ss[i][j]
+            ss = temp.copy()
+                        
+            self.screen.fill(pygame.Color('white'))
             self.draw_grid()
-
-            # Отрисовка списка клеток
-            # Выполнение одного шага игры (обновление состояния ячеек)
-            # PUT YOUR CODE HERE
-
+            self.draw_cell_list(ss)
             pygame.display.flip()
+            
             clock.tick(self.speed)
         pygame.quit()
 
-    def cell_list(self, randomize=True):
-        """ Создание списка клеток.
 
-        :param randomize: Если True, то создается список клеток, где
-        каждая клетка равновероятно может быть живой (1) или мертвой (0).
-        :return: Список клеток, представленный в виде матрицы
-        """
-        self.clist = []
-        # PUT YOUR CODE HERE
-        return self.clist
+    def take_form_file(self):
+        f = open('file.txt')
+        grid = f.read()
+        grid = list(grid)
+        try:
+            for i in range(len(grid)):
+                vg = grid.index('\n',i)
+                grid.pop(vg)
+        except:
+            pass
+        
+        print(grid)
+            
 
-    def draw_cell_list(self, clist):
-        """ Отображение списка клеток
 
-        :param rects: Список клеток для отрисовки, представленный в виде матрицы
-        """
-        pass
+    def cell_list(self):
+        x = self.height // self.cell_size
+        y = self.width // self.cell_size
+        a = []
+        for i in range(x+1):
+            if i == 0:
+                pass
+            else:
+                a.append(b)
+            b = []
+            for j in range(y):
+                b.append(random.randrange(0,2)) 
+        
+        return a  
 
-    def get_neighbours(self, cell):
-        """ Вернуть список соседей для указанной ячейки
+    def cell_list1(self):
+        x = self.height // self.cell_size
+        y = self.width // self.cell_size
+        a = []
+        for i in range(x+1):
+            if i == 0:
+                pass
+            else:
+                a.append(b)
+            b = []
+            for j in range(y):
+                b.append(0) 
+        
+        return a 
 
-        :param cell: Позиция ячейки в сетке, задается кортежем вида (row, col)
-        :return: Одномерный список ячеек, смежных к ячейке cell
-        """
-        neighbours = []
-        # PUT YOUR CODE HERE
-        return neighbours
 
-    def update_cell_list(self, cell_list):
-        """ Выполнить один шаг игры.
 
-        Обновление всех ячеек происходит одновременно. Функция возвращает
-        новое игровое поле.
+    def draw_cell_list(self, rects):
+        tf = (0, 255, 0)
+        x = self.cell_height
+        y = self.cell_width
+        
+        for i in range(x):
+            for j in range(y):
+                
+                if rects[i][j] == 1:
+                    print(i,j)
+                    h1 = i*self.cell_size
+                    w1 = j*self.cell_size    
+                    pygame.draw.rect(self.screen, tf, (w1+1, h1+1, self.cell_size-1, self.cell_size-1))
 
-        :param cell_list: Игровое поле, представленное в виде матрицы
-        :return: Обновленное игровое поле
-        """
-        new_clist = []
-        # PUT YOUR CODE HERE
-        return self.clist
+    def draw_cell_list1(self, rects):
+        tf = (0, 0,0)
+        x = self.cell_height
+        y = self.cell_width
+        for i in range(x):
+            for j in range(y):
+                h1 = j*self.cell_size
+                w1 = i*self.cell_size    
+                pygame.draw.rect(self.screen, tf, (h1, w1, self.cell_size, self.cell_size))
+
+
+
+
+
+    def get_neighbours(self, rects, cellh, cellw):
+        lists = []
+        
+        try:
+            if rects[cellh+1][cellw] == 1:
+                lists.append([cellh+1,cellw])
+        except:
+            pass
+            
+        try:
+            if (rects[cellh-1][cellw] == 1) and (cellh-1 > 0):
+                lists.append([cellh-1,cellw])
+        except:
+            pass
+        try:
+            if rects[cellh][cellw+1] == 1:
+                lists.append([cellh,cellw+1])
+        except:
+            pass
+        try:
+            if (rects[cellh][cellw-1] == 1) and (cellw-1 > 0):
+                lists.append([cellh,cellw-1])
+        except:
+            pass
+        try:
+            if (rects[cellh+1][cellw-1] == 1) and (cellw-1 > 0):
+                lists.append([cellh+1,cellw-1])
+        except:
+            pass
+        try:
+            if (rects[cellh-1][cellw+1] == 1) and (cellh-1 > 0):
+                lists.append([cellh-1,cellw+1])
+        except:
+            pass
+        try:
+            if rects[cellh+1][cellw+1] == 1:
+                lists.append([cellh+1,cellw+1])
+        except:
+            pass
+        try:
+            if (rects[cellh-1][cellw-1] == 1) and (cellh-1 > 0) and (cellw-1 > 0):
+                lists.append([cellh-1,cellw-1])
+        except:
+            pass
+        return lists
+
+
+if __name__ == '__main__':
+    game = GameOfLife(600, 600, 20)
+    game.run()
