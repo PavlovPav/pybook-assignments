@@ -4,7 +4,6 @@ import random
 def is_prime(n):
     """
     Tests to see if a number is prime.
-
     >>> is_prime(2)
     True
     >>> is_prime(11)
@@ -12,33 +11,52 @@ def is_prime(n):
     >>> is_prime(8)
     False
     """
-    # PUT YOUR CODE HERE
-    pass
+    for i in range(2, n//2):
+        if n % i == 0:
+            return False
+    else:
+        return True
 
 
 def gcd(a, b):
     """
     Euclid's algorithm for determining the greatest common divisor.
-
     >>> gcd(12, 15)
     3
     >>> gcd(3, 7)
     1
+    >>> gcd(2, 48)
+    2
+    >>> gcd(33, 33)
+    33
+    >>> gcd(11111111, 2)
+    1
     """
-    # PUT YOUR CODE HERE
-    pass
+    if a < b:
+        b, a = a, b
+    while a % b != 0:
+        a, b = b, a % b
+    return(b)
 
 
 def multiplicative_inverse(e, phi):
     """
     Euclid's extended algorithm for finding the multiplicative
     inverse of two numbers.
-
     >>> multiplicative_inverse(7, 40)
     23
     """
-    # PUT YOUR CODE HERE
-    pass
+    #(d * e) % phi = 1
+    fpart = []
+    while phi % e != 0:
+        fpart.append(phi//e)
+        phi, e = e, phi % e
+    fpart.reverse()
+    x = 0
+    y = 1
+    for i in fpart:
+        x, y = y, x - y * i
+    return y % phi
 
 
 def generate_keypair(p, q):
@@ -47,15 +65,10 @@ def generate_keypair(p, q):
     elif p == q:
         raise ValueError('p and q cannot be equal')
 
-    # n = pq
-    # PUT YOUR CODE HERE
-
-    # phi = (p-1)(q-1)
-    # PUT YOUR CODE HERE
-
+    n = p * q
+    phi = (p - 1) * (q - 1)
     # Choose an integer e such that e and phi(n) are coprime
     e = random.randrange(1, phi)
-
     # Use Euclid's Algorithm to verify that e and phi(n) are comprime
     g = gcd(e, phi)
     while g != 1:
@@ -67,7 +80,7 @@ def generate_keypair(p, q):
 
     # Return public and private keypair
     # Public key is (e, n) and private key is (d, n)
-    return ((e, n), (d, n))
+    return (e, n), (d, n)
 
 
 def encrypt(pk, plaintext):
