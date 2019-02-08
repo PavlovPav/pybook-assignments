@@ -10,15 +10,15 @@ def encrypt_caesar(plaintext):
        >>> encrypt_caesar("")
        ''
        """
-    cipher_text = ''  # создаем пустую строку.
-    key = 3
+    cipher_text = ''
+    key_shift = int(input())        # запрашиваем произвольный сдвиг
     for char in plaintext:
         if ord('A') <= ord(char) <= ord('Z'):      # проверка диапазона для заглавных символов.
-            new_char = ord(char) + key
+            new_char = ord(char) + key_shift
             new_char = chr((new_char - ord('A')) % (ord('Z') - ord('A') + 1) + ord('A'))
             cipher_text += new_char
         elif ord('a') <= ord(char) <= ord('z'):    # проверка диапазона для малых символов
-            new_char = ord(char) + key
+            new_char = ord(char) + key_shift
             new_char = chr((new_char - ord('a')) % (ord('z') - ord('a') + 1) + ord('a'))
             cipher_text += new_char
         else:
@@ -38,14 +38,14 @@ def decrypt_caesar(ciphertext):
         ''
         """
     cipher_text = ''
-    key = 3
+    key_shift = int(input())       # запрашиваем произвольный сдвиг
     for char in ciphertext:
         if ord('A') <= ord(char) <= ord('Z'):               # проверка диапазона заглвынх букв
-            new_char = ord(char) - key
+            new_char = ord(char) - key_shift
             new_char = chr((new_char - ord('A')) % (ord('Z') - ord('A') + 1) + ord('A'))
             cipher_text += new_char
         elif ord('a') <= ord(char) <= ord('z'):             # проверка диапазона для малых букв
-            new_char = ord(char) - key
+            new_char = ord(char) - key_shift
             new_char = chr((new_char - ord('a')) % (ord('z') - ord('a') + 1) + ord('a'))
             cipher_text += new_char
         else:
