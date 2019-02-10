@@ -6,10 +6,10 @@ def group(values, n):
     answer = []
     helper = []
     counter = 0
-    for i in range(0,n):
+    for i in range(0, n):
         if counter >= len(values):
             break
-        for j in range(0,n):
+        for j in range(0, n):
             if counter >= len(values):
                 break
             helper.append(values[counter])
@@ -60,12 +60,12 @@ def get_col(values, pos):
 def get_block(values, pos):
     """ Возвращает все значения из квадрата, в который попадает позиция pos """
     
-    blockRowStart = 3 * (pos[0] // 3)
-    blockColumnStart = 3 * (pos[1] // 3)
+    block_Row_Start = 3 * (pos[0] // 3)
+    block_Column_Start = 3 * (pos[1] // 3)
     answer = []
     for i in range(3):
         for j in range(3):
-             answer.append(values[blockRowStart + i][blockColumnStart + j])
+             answer.append(values[block_Row_Start + i][block_Column_Start + j])
     return answer
 
 def display(values):
@@ -157,15 +157,15 @@ def generate_sudoku(grid,n):
     check = []
     
     while cou < n:
-        ss1 = random.randrange(0,9)
-        ss2 = random.randrange(0,9)
-        if [ss1,ss2] not in check:
+        ss1 = random.randrange(0, 9)
+        ss2 = random.randrange(0, 9)
+        if [ss1, ss2] not in check:
             
             check.append([ss1, ss2])
             
-            row = get_row(grid, [ss1,ss2])
+            row = get_row(grid, [ss1, ss2])
             col = get_col(grid, [ss1,ss2])
-            block = get_block(grid, [ss1,ss2])
+            block = get_block(grid, [ss1, ss2])
   
             for i in range(9):
                 if ((str(i+1) not in row) and (str(i+1) not in col) and (str(i+1) not in block)):
