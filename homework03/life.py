@@ -107,8 +107,9 @@ class GameOfLife:
                 a.append(b)
             b = []
             for j in range(y):
-                b.append(random.randrange(0,2)) 
-        
+                b.append(random.randrange(0,2))
+
+
         return a  
 
     def cell_list1(self):
