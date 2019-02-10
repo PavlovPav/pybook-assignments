@@ -11,11 +11,11 @@ def is_prime(n):
     >>> is_prime(8)
     False
     """
-    for i in range(2, n//2):
-        if n % i == 0:
+    for i in range(2, n):
+        if (n % i == 0):
             return False
-    else:
-        return True
+
+    return True
 
 
 def gcd(a, b):
@@ -25,18 +25,12 @@ def gcd(a, b):
     3
     >>> gcd(3, 7)
     1
-    >>> gcd(2, 48)
-    2
-    >>> gcd(33, 33)
-    33
-    >>> gcd(11111111, 2)
-    1
     """
-    if a < b:
-        b, a = a, b
-    while a % b != 0:
-        a, b = b, a % b
-    return(b)
+    while (a % b != 0):
+        c = a % b
+        a = b
+        b = c
+    return b
 
 
 def multiplicative_inverse(e, phi):
@@ -46,17 +40,27 @@ def multiplicative_inverse(e, phi):
     >>> multiplicative_inverse(7, 40)
     23
     """
-    #(d * e) % phi = 1
-    fpart = []
-    while phi % e != 0:
-        fpart.append(phi//e)
-        phi, e = e, phi % e
-    fpart.reverse()
+    a = e
+    b = phi
+    quotients = []
+
+    while (a % b != 0):
+        c = a % b
+        quotients.append(a // b)
+        a = b
+        b = c
+
+    quotients.append(a // b)
+
     x = 0
     y = 1
-    for i in fpart:
-        x, y = y, x - y * i
-    return y % phi
+    for i in range(len(quotients) - 2, -1, -1):
+        c = x
+        x = y
+        y = c - (y * quotients[i])
+
+    return x % phi
+
 
 
 def generate_keypair(p, q):
@@ -65,10 +69,15 @@ def generate_keypair(p, q):
     elif p == q:
         raise ValueError('p and q cannot be equal')
 
+    # n = pq
     n = p * q
+
+    # phi = (p-1)(q-1)
     phi = (p - 1) * (q - 1)
+
     # Choose an integer e such that e and phi(n) are coprime
     e = random.randrange(1, phi)
+
     # Use Euclid's Algorithm to verify that e and phi(n) are comprime
     g = gcd(e, phi)
     while g != 1:
@@ -80,7 +89,7 @@ def generate_keypair(p, q):
 
     # Return public and private keypair
     # Public key is (e, n) and private key is (d, n)
-    return (e, n), (d, n)
+    return ((e, n), (d, n))
 
 
 def encrypt(pk, plaintext):
