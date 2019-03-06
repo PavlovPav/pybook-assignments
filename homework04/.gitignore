@@ -1,4 +1,4 @@
-config.py
-friends.get.py
-.idea/
 __pycache__/
+.idea/
+.credentials
+

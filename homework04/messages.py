@@ -1,16 +1,17 @@
 from collections import Counter
-import datetime
+from datetime import datetime
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
 from typing import List, Tuple
-from typing import Dict
-import json
-
 from api import messages_get_history
 from api_models import Message
 import config
 
+"""
+DEPRECATED!
+This module does not work with new vk api
+"""
 
 Dates = List[datetime.date]
 Frequencies = List[int]
@@ -23,36 +24,43 @@ plotly.tools.set_credentials_file(
 
 
 def fromtimestamp(ts: int) -> datetime.date:
-    return datetime.datetime.fromtimestamp(ts).date()
+    return datetime.fromtimestamp(ts).date()
 
 
 def count_dates_from_messages(messages: List[Message]) -> Tuple[Dates, Frequencies]:
-    """ Получить список дат и их частот
+    """ Get messages dates and their frequencies
 
-    :param messages: список сообщений
+    :param messages: list of Messages
     """
-    date_count: Dict[datetime.date, int] = {}
-    for msg in messages:
-        if msg.date in date_count:
-            print("exists:", msg.date)
-            date_count[msg.date] += 1
-        else:
-            print("new:", msg.date)
-            date_count[msg.date] = 1
-    dates: Dates = []
-    freqs: Frequencies = []
-    for date, freq in date_count.items():
-        dates.append(date)
-        freqs.append(freq)
-    return dates, freqs
+
+    m_dates, m_counts = [], []
+    frequency = Counter()
+    for message in messages:
+        message_date = fromtimestamp(message.date)
+        frequency[message_date] += 1
+
+    for date in frequency:
+        m_dates.append(date)
+        m_counts.append(frequency[date])
+
+    return m_dates, m_counts
 
 
 def plotly_messages_freq(dates: Dates, freq: Frequencies) -> None:
-    """ Построение графика с помощью Plot.ly
+    """ Create plotly chart
 
-    :param dates: список дат
-    :param freq: число сообщений в соответствующую дату
+    :param date: list of dates
+    :param freq: list of messages numbers at certain dates
     """
 
+    plotly.tools.set_credentials_file(username=config.PLOTLY_CONFIG['username'], api_key=config.PLOTLY_CONFIG['api_key'])
     data = [go.Scatter(x=dates, y=freq)]
-    py.iplot(data)
+    py.plot(data)
+
+
+if __name__ == '__main__':
+    # messages_list = messages_get_history(VK_USER_ID, 0, 1000)
+    # messages_stat = count_dates_from_messages(messages_list)
+    # plotly_messages_freq(messages_stat[0], messages_stat[1])
+    print("Oops, this module is deprecated, because vk api does not support IT MOre")
+

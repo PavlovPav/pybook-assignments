@@ -2,6 +2,11 @@ import unittest
 from unittest.mock import patch
 import datetime as dt
 
+# If the script importing the module is not in a package
+import os,sys,inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
 from age import age_predict
 
 

@@ -2,6 +2,11 @@ import unittest
 import datetime as dt
 import random
 
+# If the script importing the module is not in a package
+import os,sys,inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
 from messages import count_dates_from_messages
 from api_models import Message
 

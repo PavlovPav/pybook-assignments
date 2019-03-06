@@ -1,7 +1,8 @@
 VK_CONFIG = {
     'domain': 'https://api.vk.com/method',
-    'access_token': 'Токен доступа',
+    'access_token': 'VK_ACCESS_TOKEN',
     'version': '5.87',
+    'my_id': 'VK_USER_ID'
 }
 
 

@@ -26,15 +26,16 @@ def age_predict(user_id: int) -> Optional[float]:
     # PUT YOUR CODE HERE
     response = get_friends(user_id, 'bdate')
     bh_dates = list()
+    u_ages = list()
     for i in range(response.json()['response']['count']):
         friend = response.json()['response']['items'][i]
         if 'bdate' not in friend:
             continue
         try:
             bh_date = datetime.datetime.strptime(friend['bdate'], '%d.%m.%Y')
-            bh_dates.append(bh_date)
+            u_ages.append(calculate_age(bh_date))
         except ValueError:
             continue
     bh_dates.sort()
-    mediana = statistics.median(bh_dates)
-    return calculate_age(mediana)
+    return statistics.median(u_ages)
+
